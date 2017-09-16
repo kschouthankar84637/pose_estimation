@@ -34,20 +34,16 @@ vector< vector<Point> > contours,contours1,contours2;
 vector<Vec4i> hierarchy,hierarchy1,hierarchy2;
 double minArea,translation_distance;
 //int index;
-double qualityLevel = 0.25;//0.24;
-double minDistance = 12;
-int blockSize =25;
+double qualityLevel = 0.15;
+double minDistance = 8;
+int blockSize =27;
 bool useHarrisDetector = true;
-double k = 0.04;
+double k = 0.061;
 int ext_left_index,ext_right_index,ext_top_index,ext_bottom_index;
 double m;
 Point2f temp_point;
 char str[5];
 Vec3f eulerangles;
-Size winSize = Size( 5, 5 );
-Size zeroZone = Size( -1, -1 );
-TermCriteria criteria = TermCriteria( TermCriteria::EPS + TermCriteria::MAX_ITER, 40, 0.001 );
-
 
 tf::Quaternion q;
 geometry_msgs::Pose pose;
@@ -148,6 +144,9 @@ solvePnPRansac(model_points,src_helipad_corners_ex,camera_matrix,dist_coeffs,rot
 		rotationMatrixToEulerAngles();
 //translation_distance=sqrt((trans.at<double>(0,0)*trans.at<double>(0,0))+(trans.at<double>(0,1)*trans.at<double>(0,1))+(trans.at<double>(0,2)*trans.at<double>(0,2)));	
 
+ROS_INFO(" \n\n Translation distance: [%f] [%f] [%f]",trans.at<double>(0,0),trans.at<double>(0,1),trans.at<double>(0,2));
+		//cout<<"\n\ntranslation distance:"<< translation_distance;		
+		cout<<"\n\nEuler Angles: "<<" Roll:  "<<eulerangles[2]*57.296<<" Pitch: "<<eulerangles[1]*57.296<<" Yaw: "<<eulerangles[0]*57.296;
 
 
 q.setRPY(eulerangles[2],eulerangles[1],eulerangles[0]);
@@ -258,7 +257,7 @@ void detect_corners()
 {
 
 resize(helipad,helipad_temp,Size(),3,3,INTER_LINEAR);
-GaussianBlur(helipad_temp,helipad_temp2,Size(9,9),15);
+GaussianBlur(helipad_temp,helipad_temp2,Size(7,7),11);
 if(thresh_corn < 1 ) { thresh_corn = 1; }
 
 
@@ -280,7 +279,7 @@ if(thresh_corn < 1 ) { thresh_corn = 1; }
 /*
 helipad_temp.copyTo(finale1);
 int r =7;
-  for( int i = 0; i < src_helipad_corners.size(); ++i )
+  for( i = 0; i < src_helipad_corners.size(); ++i )
      { circle(finale1, src_helipad_corners[i], r, Scalar(0,0,0), -1, 8, 0 );
 	//sprintf(str,"%d",i);
 	//putText(finale1,str,src_helipad_corners_ex[i],FONT_HERSHEY_PLAIN, 7,  Scalar(0,0,0));
@@ -337,7 +336,7 @@ src.copyTo(finale1);
 
 
 int r =3;
-  for( int i = 0; i < src_helipad_corners_ex.size(); ++i )
+  for( i = 0; i < src_helipad_corners_ex.size(); ++i )
      { circle(finale1, src_helipad_corners_ex[i], r, Scalar(255,255,255), 2, 8, 0 );
 	sprintf(str,"%d",i);
 	putText(finale1,str,src_helipad_corners_ex[i],FONT_HERSHEY_PLAIN, 7,  Scalar(0,0,0));
