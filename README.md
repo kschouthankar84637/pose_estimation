@@ -12,3 +12,5 @@ The x-axis is along the longer side of H. The y-axis is away from the shorter si
 
 The video relevant is can be found on: https://youtu.be/H3O-9_tb7K0
 
+Crammed everything in 421 lines of code. Used inline functions, call by reference, global arrays, pre-increment operators, constructors and destructors to reduce runtime.
+
